@@ -1,0 +1,10 @@
+# Build-time generators — not part of the deployed static site
+scripts/
+
+# Source artwork the generators read from (khoj-ink.png is the deployed one)
+Logo.png
+
+# Local/dev cruft
+__pycache__/
+*.pyc
+.DS_Store

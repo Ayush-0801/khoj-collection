@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khoj Collection — Odisha Handlooms</title>
+<meta name="description" content="Khoj Collection — handwoven ikat, bandha and tussar from the looms of Odisha.">
+<link rel="icon" href="assets/img/khoj-ink.png">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="is-loading">
+
+<!-- The thread. During the intro it covers the viewport; afterwards it stays
+     exactly where it is and becomes the hero's own artwork. -->
+<canvas id="ink" aria-hidden="true"></canvas>
+
+<div id="loader" aria-hidden="true">
+  <div class="loader-ui">
+    <p id="loader-caption">Khoj — to seek</p>
+    <div class="loader-track"><span id="loader-bar"></span></div>
+  </div>
+  <button id="loader-skip" type="button">Skip</button>
+</div>
+
+<!-- ── the catalogue ───────────────────────────────────────────────────── -->
+<header class="site-head">
+  <a class="brand" href="#top">
+    <span class="brand-badge"><img id="brand-mark" src="assets/img/khoj-ink.png" alt=""></span>
+    <span class="brand-text">
+      <b>Khoj Collection</b>
+      <i>Odisha handlooms</i>
+    </span>
+  </a>
+  <nav class="site-nav">
+    <a href="#weaves">Weaves</a>
+    <a href="#process">The Bandha</a>
+    <a href="#visit">Visit</a>
+    <a class="ghost" href="#weaves">Catalogue</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">Sambalpur · Nuapatna · Kotpad · Bargarh</p>
+    <h1>Every saree begins<br>as a knot.</h1>
+    <p class="lede">
+      In Odisha the pattern is tied and dyed into the yarn <em>before</em> a
+      single thread is woven. The weaver holds the whole design in memory,
+      then finds it again on the loom. That search is what <b>khoj</b> means.
+    </p>
+    <div class="hero-cta">
+      <a class="btn" href="#weaves">See the catalogue</a>
+      <a class="btn btn-quiet" href="#process">How bandha is made</a>
+    </div>
+  </section>
+
+  <section class="weaves" id="weaves">
+    <div class="section-head">
+      <h2>The weaves</h2>
+      <p>Six families, each from its own cluster of villages, each with a
+         grammar of motifs you can read like handwriting.</p>
+    </div>
+    <div class="grid" id="weave-grid"></div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="section-head">
+      <h2>Tie. Dye. Weave.</h2>
+      <p>Bandha is resist-dyeing done to the yarn itself. Nothing is printed;
+         the blur at every motif's edge is the proof.</p>
+    </div>
+    <ol class="steps">
+      <li>
+        <span class="step-n">01</span>
+        <h3>Bandha — the tying</h3>
+        <p>Warp and weft are stretched and bound in tight rubber ties, section
+           by section, to the count of the design. A saree can take
+           several thousand.</p>
+      </li>
+      <li>
+        <span class="step-n">02</span>
+        <h3>Rangan — the dyeing</h3>
+        <p>Dipped darkest-last, untied and retied between baths. What the ties
+           protect stays pale; what they miss takes colour.</p>
+      </li>
+      <li>
+        <span class="step-n">03</span>
+        <h3>Buna — the weaving</h3>
+        <p>The dyed yarn goes on the loom and the weaver aligns pick against
+           pick until the pattern surfaces. Misalign by two threads and the
+           motif is lost.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="visit" id="visit">
+    <h2>Come and see the loom</h2>
+    <p>We buy direct from weaver co-operatives across western and coastal
+       Odisha. Every piece arrives with the name of the hands that made it.</p>
+    <p class="visit-line">
+      <a class="btn" href="mailto:hello@khojcollection.in">hello@khojcollection.in</a>
+      <span>Bhubaneswar · by appointment</span>
+    </p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <span>Khoj Collection</span>
+  <span>Handwoven in Odisha, India</span>
+</footer>
+
+<script src="assets/js/vendor/anime.min.js"></script>
+<script src="assets/js/khoj-path.js"></script>
+<script src="assets/js/signature.js"></script>
+<script src="assets/js/thread.js"></script>
+<script src="assets/js/swatches.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
