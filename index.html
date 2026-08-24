@@ -3,117 +3,373 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Khoj Collection — Odisha Handlooms</title>
-<meta name="description" content="Khoj Collection — handwoven ikat, bandha and tussar from the looms of Odisha.">
+<title>Khoj Collection: craft by the women of Odisha</title>
+<meta name="description" content="A social enterprise working with women artisans in Odisha. Sabai grass baskets coiled in Balasore, and handloom dohars, table runners, potlis and Sambalpuri sarees curated from the clusters.">
+<link rel="canonical" href="https://ayush-0801.github.io/khoj-collection/">
 <link rel="icon" href="assets/img/khoj-ink.png">
+<link rel="apple-touch-icon" href="assets/img/khoj-ink.png">
+<meta name="theme-color" content="#f6f0e6">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Khoj Collection">
+<meta property="og:title" content="Khoj Collection: craft by the women of Odisha">
+<meta property="og:description" content="A social enterprise working with women artisans in Odisha. Sabai grass baskets coiled in Balasore, and handloom dohars, table runners, potlis and Sambalpuri sarees curated from the clusters.">
+<meta property="og:url" content="https://ayush-0801.github.io/khoj-collection/">
+<meta property="og:image" content="https://ayush-0801.github.io/khoj-collection/assets/img/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Khoj Collection",
+  "description": "Social enterprise working with women artisans in Odisha, India: sabai grass craft and Odisha handloom.",
+  "url": "https://ayush-0801.github.io/khoj-collection/",
+  "logo": "https://ayush-0801.github.io/khoj-collection/assets/img/khoj-ink.png",
+  "email": "hello@khojcollection.in",
+  "telephone": "+918882644544",
+  "founder": { "@type": "Person", "name": "Malini Misra" },
+  "areaServed": "IN",
+  "knowsAbout": ["Sabai grass craft", "Odisha handloom", "Sambalpuri bandha", "Kotpad natural dye"]
+}
+</script>
 </head>
-<body class="is-loading">
+<body>
 
-<!-- The thread. During the intro it covers the viewport; afterwards it stays
-     exactly where it is and becomes the hero's own artwork. -->
-<canvas id="ink" aria-hidden="true"></canvas>
-
-<div id="loader" aria-hidden="true">
-  <div class="loader-ui">
-    <p id="loader-caption">Khoj — to seek</p>
-    <div class="loader-track"><span id="loader-bar"></span></div>
-  </div>
-  <button id="loader-skip" type="button">Skip</button>
-</div>
-
-<!-- ── the catalogue ───────────────────────────────────────────────────── -->
 <header class="site-head">
   <a class="brand" href="#top">
     <span class="brand-badge"><img id="brand-mark" src="assets/img/khoj-ink.png" alt=""></span>
     <span class="brand-text">
       <b>Khoj Collection</b>
-      <i>Odisha handlooms</i>
+      <i>Craft by the women of Odisha</i>
     </span>
   </a>
   <nav class="site-nav">
-    <a href="#weaves">Weaves</a>
-    <a href="#process">The Bandha</a>
-    <a href="#visit">Visit</a>
-    <a class="ghost" href="#weaves">Catalogue</a>
+    <a href="#stories">Stories</a>
+    <a href="#model">Our Model</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <main id="top">
+
   <section class="hero">
-    <p class="eyebrow">Sambalpur · Nuapatna · Kotpad · Bargarh</p>
-    <h1>Every saree begins<br>as a knot.</h1>
+    <p class="eyebrow">Balasore · Sambalpur · Kotpad · Nuapatna · Bargarh</p>
+    <h1>Woven by the women<br>of Odisha.</h1>
     <p class="lede">
-      In Odisha the pattern is tied and dyed into the yarn <em>before</em> a
-      single thread is woven. The weaver holds the whole design in memory,
-      then finds it again on the loom. That search is what <b>khoj</b> means.
+      Khoj Collection is a social enterprise working with women artisans across
+      Odisha. We design and curate what they make, and we get it in front of
+      people who will pay properly for it: <b>skill support, fair pricing,
+      market access</b>, and nothing taken off the top.
     </p>
     <div class="hero-cta">
-      <a class="btn" href="#weaves">See the catalogue</a>
-      <a class="btn btn-quiet" href="#process">How bandha is made</a>
+      <a class="btn" href="catalogue.html">See the catalogue</a>
     </div>
   </section>
 
-  <section class="weaves" id="weaves">
-    <div class="section-head">
-      <h2>The weaves</h2>
-      <p>Six families, each from its own cluster of villages, each with a
-         grammar of motifs you can read like handwriting.</p>
-    </div>
-    <div class="grid" id="weave-grid"></div>
+  <section class="founder-say">
+    <blockquote>
+      By supporting these artisans, we can showcase generational artistry while
+      fostering direct economic independence and confidence among women.
+    </blockquote>
+    <cite>Malini Misra<span>Founder, Khoj Collection</span></cite>
   </section>
 
-  <section class="process" id="process">
+  <section class="glimpse" id="glimpse">
     <div class="section-head">
-      <h2>Tie. Dye. Weave.</h2>
-      <p>Bandha is resist-dyeing done to the yarn itself. Nothing is printed;
-         the blur at every motif's edge is the proof.</p>
+      <h2>The Catalogue</h2>
+      <p>Five lines: sabai grass, dohars, table runners, potlis and
+         Sambalpuri sarees. A few pieces here; prices and dimensions on every
+         card in the catalogue.</p>
     </div>
+
+    <div class="rail" id="glimpse-rail" tabindex="0" role="region"
+         aria-label="A few pieces from the catalogue">
+      <a class="rail-card" href="catalogue.html#sabai-nesting-basket-set">
+        <div class="card-shot">
+          <img src="assets/img/products/sabai/nesting-basket-set/hero.webp" width="1200" height="1500"
+               loading="lazy" decoding="async" alt="Nesting Basket Set.">
+        </div>
+        <div class="card-body">
+          <h3>Nesting Basket Set</h3>
+          <p class="card-place">Sabai grass · Balasore</p>
+          <p class="card-foot"><b>₹ 1,850</b><span>22, 26 and 30 cm across</span></p>
+        </div>
+      </a>
+      <a class="rail-card" href="catalogue.html#dohar-indigo-check">
+        <div class="card-shot">
+          <img src="assets/img/products/dohar/indigo-check/hero.webp" width="1200" height="1500"
+               loading="lazy" decoding="async" alt="Indigo Check Dohar.">
+        </div>
+        <div class="card-body">
+          <h3>Indigo Check Dohar</h3>
+          <p class="card-place">Handloom cotton · Sambalpur</p>
+          <p class="card-foot"><b>₹ 2,400</b><span>2.3 × 1.5 m</span></p>
+        </div>
+      </a>
+      <a class="rail-card" href="catalogue.html#runner-kotpad">
+        <div class="card-shot">
+          <img src="assets/img/products/runner/kotpad/hero.webp" width="1500" height="1000"
+               loading="lazy" decoding="async" alt="Kotpad Table Runner.">
+        </div>
+        <div class="card-body">
+          <h3>Kotpad Table Runner</h3>
+          <p class="card-place">Handloom cotton · Koraput</p>
+          <p class="card-foot"><b>₹ 1,150</b><span>1.8 m × 40 cm</span></p>
+        </div>
+      </a>
+      <a class="rail-card" href="catalogue.html#sabai-lidded-basket">
+        <div class="card-shot">
+          <img src="assets/img/products/sabai/lidded-basket/hero.webp" width="1200" height="1500"
+               loading="lazy" decoding="async" alt="Round Lidded Basket.">
+        </div>
+        <div class="card-body">
+          <h3>Round Lidded Basket</h3>
+          <p class="card-place">Sabai grass · Balasore</p>
+          <p class="card-foot"><b>₹ 1,200</b><span>25 cm across, 18 cm tall</span></p>
+        </div>
+      </a>
+      <a class="rail-card" href="catalogue.html#potli-maroon-silk">
+        <div class="card-shot">
+          <img src="assets/img/products/potli/maroon-silk/hero.webp" width="1200" height="1500"
+               loading="lazy" decoding="async" alt="Maroon Silk Potli.">
+        </div>
+        <div class="card-body">
+          <h3>Maroon Silk Potli</h3>
+          <p class="card-place">Handloom silk · Nuapatna</p>
+          <p class="card-foot"><b>₹ 680</b><span>20 cm across, 18 cm tall</span></p>
+        </div>
+      </a>
+      <a class="rail-card" href="catalogue.html#saree-sambalpuri-bandha">
+        <div class="card-shot">
+          <img src="assets/img/products/saree/sambalpuri-bandha/hero.webp" width="1200" height="1500"
+               loading="lazy" decoding="async" alt="Sambalpuri Bandha Saree.">
+        </div>
+        <div class="card-body">
+          <h3>Sambalpuri Bandha Saree</h3>
+          <p class="card-place">Bandha silk · Bargarh</p>
+          <p class="card-foot"><b>₹ 9,400</b><span>5.5 m × 1.15 m</span></p>
+        </div>
+      </a>
+    </div>
+
+    <div class="rail-foot">
+      <div class="rail-nav">
+        <button class="rail-btn" type="button" data-dir="-1" aria-label="Scroll left">&#8249;</button>
+        <button class="rail-btn" type="button" data-dir="1" aria-label="Scroll right">&#8250;</button>
+      </div>
+      <a class="btn" href="catalogue.html">See the full catalogue</a>
+    </div>
+  </section>
+
+  <section class="story" id="stories">
+    <div class="section-head">
+      <h2>Stories</h2>
+      <p>Every piece in the catalogue was made by someone. These are the people,
+         and the reason any of this exists.</p>
+    </div>
+
+    <div class="story-split">
+      <div class="story-body">
+        <h3>The founder</h3>
+        <p>Khoj Collection was founded by <b>Malini Misra</b>. For the past six
+           years, living in Delhi while her husband was posted there, she has
+           worked on a single question: how do you get the craft of Odisha in
+           front of people who will pay properly for it, without taking the craft
+           away from the women who make it?</p>
+        <p>The answer was to do two different things at once. For sabai grass,
+           design the pieces herself and work directly with one group of artisans
+           until they are made well and made consistently. For handloom, design
+           nothing. Go to the clusters that have woven dohars and bandha
+           for generations, find the good work, and pay a price that makes it
+           worth continuing.</p>
+      </div>
+      <figure class="story-fig">
+        <img src="assets/img/stories/founder.webp" width="1200" height="900"
+             loading="lazy" decoding="async"
+             alt="Malini Misra, founder of Khoj Collection.">
+        <figcaption>Malini Misra, founder.</figcaption>
+      </figure>
+    </div>
+
+    <div class="pull">
+      <blockquote>
+        We are Sabai Grass artisans from Northern Odisha, sharing our creations
+        with joy and gratitude.
+      </blockquote>
+      <cite>The Balasore self-help group</cite>
+    </div>
+
+    <div class="story-split">
+      <figure class="story-fig">
+        <img src="assets/img/people/balasore-group.webp" width="1600" height="900"
+             loading="lazy" decoding="async"
+             alt="Artisans of the Balasore self-help group at work.">
+        <figcaption>The self-help group, Balasore district.</figcaption>
+      </figure>
+      <div class="story-body">
+        <h3>The thirty</h3>
+        <p>The sabai grass work is made by a self-help group of <b>thirty women
+           artisans in Balasore district</b>, in the north of the state. They work
+           to designs drawn with Malini, which is what makes this different
+           from most craft sourcing. The pieces are not found and resold. They are
+           designed for a market the group cannot reach on its own, and then made
+           by the group.</p>
+        <p>Sabai grows wild across northern Odisha and has been coiled into rope
+           and household baskets there for as long as anyone has recorded it. It
+           is a skill that passes between women, in the home, without a school
+           anywhere in the chain.</p>
+        <p>What the income does is less romantic and more important: it is earned
+           directly, held directly, and does not pass through anybody else's hands
+           on the way.</p>
+      </div>
+    </div>
+
+    <div class="story-split">
+      <div class="story-body">
+        <h3>How sabai is worked</h3>
+        <p>Sabai is not woven. It is <em>coiled</em>: a bundle of grass is
+           wound in a continuous spiral, and each turn is stitched to the one below
+           it with a thin strand split off the same grass. There is no frame, no
+           mould and no over-under lattice. The shape is held entirely by how
+           tightly the maker pulls each stitch.</p>
+        <p>That is why a coiled basket and a rattan one look nothing alike close
+           up, and why the work cannot be hurried. A lidded basket takes several
+           days. A coaster takes an evening, which is why coasters are what
+           a new artisan learns on.</p>
+      </div>
+      <figure class="story-fig">
+        <img src="assets/img/stories/coiling.webp" width="1200" height="900"
+             loading="lazy" decoding="async"
+             alt="Sabai grass being coiled and stitched by hand.">
+        <figcaption>Coiling and stitching, one turn at a time.</figcaption>
+      </figure>
+    </div>
+
+    <div class="story-split">
+      <figure class="story-fig">
+        <img src="assets/img/stories/loom.webp" width="1200" height="900"
+             loading="lazy" decoding="async"
+             alt="A weaver at a pit loom in an Odisha handloom cluster.">
+        <figcaption>At the pit loom, in one of the clusters we buy from.</figcaption>
+      </figure>
+      <div class="story-body">
+        <h3>The clusters</h3>
+        <p>The handloom side works differently. Dohars come from around
+           <b>Sambalpur</b>; naturally dyed runners from <b>Kotpad</b> in Koraput,
+           where cloth is dyed with aal root and iron before it is ever woven;
+           potlis from the silk looms at <b>Nuapatna</b>; bandha and pasapalli
+           sarees from <b>Bargarh</b>.</p>
+        <p>We design none of it. These are grammars of motif and technique that
+           took generations to settle, and they do not need a visiting designer.
+           What they need is somebody to buy consistently, at a price that makes a
+           young weaver think the loom is worth staying at.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="model" id="model">
+    <div class="section-head">
+      <h2>Our Business Model</h2>
+      <p>We supply retailers, state emporia and institutional buyers, on
+         consignment, through procurement, and outright.</p>
+    </div>
+
     <ol class="steps">
       <li>
         <span class="step-n">01</span>
-        <h3>Bandha — the tying</h3>
-        <p>Warp and weft are stretched and bound in tight rubber ties, section
-           by section, to the count of the design. A saree can take
-           several thousand.</p>
+        <h3>Skill support</h3>
+        <p>New artisans learn inside the group, starting on coasters and working
+           up. Nobody is sent away to be trained, and the skill stays in the
+           district.</p>
       </li>
       <li>
         <span class="step-n">02</span>
-        <h3>Rangan — the dyeing</h3>
-        <p>Dipped darkest-last, untied and retied between baths. What the ties
-           protect stays pale; what they miss takes colour.</p>
+        <h3>Fair pricing</h3>
+        <p>Price is set from the hours a piece actually takes, agreed before work
+           starts, and paid whether or not it sells quickly.</p>
       </li>
       <li>
         <span class="step-n">03</span>
-        <h3>Buna — the weaving</h3>
-        <p>The dyed yarn goes on the loom and the weaver aligns pick against
-           pick until the pattern surfaces. Misalign by two threads and the
-           motif is lost.</p>
+        <h3>Market access</h3>
+        <p>Most of this craft never leaves the district. Our job is the part the
+           artisans cannot do from Balasore: putting it in front of buyers.</p>
       </li>
     </ol>
+
+    <ul class="stat-row">
+      <li><b>30</b><span>women artisans in the Balasore self-help group</span></li>
+      <li><b>5</b><span>product lines, sabai grass and handloom</span></li>
+      <li><b>6</b><span>years supplying and curating</span></li>
+      <li><b>0</b><span>middlemen between artisan and price</span></li>
+    </ul>
+
+    <h3 class="model-sub">How we supply</h3>
+    <ul class="terms">
+      <li>
+        <b>Consignment</b>
+        <p>We supply on consignment and special consignment mode, which is how we
+           work with state emporia. Stock is placed, sold through, and reconciled
+           on an agreed cycle.</p>
+      </li>
+      <li>
+        <b>Procurement</b>
+        <p>We are set up to be considered for rural-product and
+           self-help-group procurement programmes, and can supply catalogue and
+           pricing in whatever format the process requires.</p>
+      </li>
+      <li>
+        <b>Outright wholesale</b>
+        <p>Standard wholesale terms for retailers buying to own the stock.</p>
+      </li>
+      <li>
+        <b>Lead times</b>
+        <p>Sabai grass, one to three weeks depending on the piece. Handloom, three
+           to eight weeks: a bandha saree occupies a loom for several weeks
+           and cannot be shortened.</p>
+      </li>
+      <li>
+        <b>Minimum order</b>
+        <p>Set per line and per buyer rather than fixed. Small first orders are
+           welcome; tell us what you are testing.</p>
+      </li>
+      <li>
+        <b>Sampling and customisation</b>
+        <p>Samples available before a first order. Sabai grass can be made to
+           custom dimensions and forms; handloom can be specified by colour and
+           border within what the cluster weaves.</p>
+      </li>
+    </ul>
+
+    <div class="trade-cta">
+      <a class="btn" href="mailto:hello@khojcollection.in?subject=Trade%20enquiry">Trade enquiry</a>
+    </div>
   </section>
 
-  <section class="visit" id="visit">
-    <h2>Come and see the loom</h2>
-    <p>We buy direct from weaver co-operatives across western and coastal
-       Odisha. Every piece arrives with the name of the hands that made it.</p>
-    <p class="visit-line">
-      <a class="btn" href="mailto:hello@khojcollection.in">hello@khojcollection.in</a>
-      <span>Bhubaneswar · by appointment</span>
-    </p>
-  </section>
 </main>
 
-<footer class="site-foot">
-  <span>Khoj Collection</span>
-  <span>Handwoven in Odisha, India</span>
+<footer class="site-foot" id="contact">
+  <div class="foot-main">
+    <div class="foot-say">
+      <h2>Contact Us</h2>
+      <p>For an order, a wholesale enquiry, or a copy of the current catalogue,
+         write or call. Malini answers everything herself.</p>
+    </div>
+    <div class="foot-reach">
+      <a class="foot-email" href="mailto:hello@khojcollection.in">hello@khojcollection.in</a>
+      <p class="foot-addr">
+        <a href="tel:+918882644544">+91 88826 44544</a><br>
+        Malini Misra, Founder
+      </p>
+    </div>
+  </div>
+  <div class="foot-bar">
+    <span>Khoj Collection</span>
+    <span>Keeping Odisha's craftsmanship alive, one strand of sabai grass at a time</span>
+  </div>
 </footer>
 
-<script src="assets/js/vendor/anime.min.js"></script>
-<script src="assets/js/khoj-path.js"></script>
-<script src="assets/js/signature.js"></script>
-<script src="assets/js/thread.js"></script>
-<script src="assets/js/swatches.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/rail.js"></script>
 </body>
 </html>

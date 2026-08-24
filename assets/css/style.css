@@ -9,16 +9,30 @@
   --muted: #6d5d57;
   --gold: #b9822c;
   --line: rgba(36, 27, 25, 0.14);
+
+  /* Spacing and type scales. Section rhythm stays fluid via clamp() below;
+     these are for the component-level gaps that used to be picked by eye. */
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 18px;
+  --space-4: 26px;
+  --space-5: 38px;
+  --space-6: 56px;
+
+  --step--2: 11px;
+  --step--1: 13px;
+  --step-0: 15px;
+  --step-1: 17px;
+  --step-2: 21px;
+  --step-3: clamp(26px, 3.6vw, 38px);
+  --step-4: clamp(28px, 4vw, 42px);
 }
 
 * { box-sizing: border-box; }
 
-/* The gutter is reserved from the start, so the page does not change width
-   when the intro finishes and scrolling is handed back. */
 html { scroll-behavior: smooth; scrollbar-gutter: stable; }
 
 body {
-  position: relative;   /* the resting thread is absolute against this */
   margin: 0;
   background: var(--paper);
   color: var(--text);
@@ -27,98 +41,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body.is-loading { overflow: hidden; }
-
 h1, h2, h3 { font-weight: 400; letter-spacing: -0.015em; margin: 0; }
 
 a { color: inherit; }
-
-/* ── the intro ────────────────────────────────────────────────────────── */
-
-/* The overlay is nothing but the page's own cream and some chrome, so when
-   it goes there is no visible change behind it - only the thread, which
-   never moved. */
-#loader {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: var(--paper);
-  transition: opacity 650ms ease;
-}
-
-#loader.is-done { opacity: 0; pointer-events: none; }
-
-/* A canvas is a replaced element: without an explicit size it falls back to
-   its intrinsic 300x150 rather than filling the inset box. */
-#ink {
-  position: fixed;
-  inset: 0;
-  z-index: 95;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-/* Where the thread comes to rest: no longer pinned to the viewport, it
-   scrolls away with the hero like any other piece of the page. */
-#ink.is-resting {
-  position: absolute;
-  inset: 0 0 auto 0;
-  z-index: 0;
-  width: 100%;
-  height: 100vh;
-}
-
-.loader-ui {
-  position: absolute;
-  left: 50%;
-  top: 7vh;
-  z-index: 99;
-  width: min(320px, 74vw);
-  transform: translateX(-50%);
-  text-align: center;
-  opacity: var(--ui, 1);
-}
-
-#loader-caption {
-  margin: 0 0 14px;
-  color: var(--muted);
-  font-size: 12px;
-  letter-spacing: 0.34em;
-  text-transform: uppercase;
-}
-
-.loader-track { height: 1px; background: rgba(36, 27, 25, 0.14); overflow: hidden; }
-
-#loader-bar {
-  display: block;
-  height: 100%;
-  background: var(--ink);
-  transform: scaleX(0);
-  transform-origin: left center;
-}
-
-#loader-skip {
-  position: absolute;
-  right: 26px;
-  top: 24px;
-  z-index: 99;
-  padding: 8px 16px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  cursor: pointer;
-  opacity: var(--ui, 1);
-  transition: color 200ms, border-color 200ms;
-}
-
-#loader-skip:hover { color: var(--text); border-color: var(--ink); }
 
 /* ── header ───────────────────────────────────────────────────────────── */
 
@@ -148,9 +73,7 @@ a { color: inherit; }
   border: 1px solid var(--line);
 }
 
-#brand-mark { width: 38px; height: auto; transition: opacity 500ms ease 300ms; }
-
-body.is-loading #brand-mark { opacity: 0; }
+#brand-mark { width: 38px; height: auto; }
 
 .brand-text { display: flex; flex-direction: column; line-height: 1.25; }
 .brand-text b { font-weight: 400; font-size: 19px; letter-spacing: 0.02em; }
@@ -176,22 +99,10 @@ body.is-loading #brand-mark { opacity: 0; }
 
 .site-nav a:hover { color: var(--text); border-color: var(--ink); }
 
-.site-nav .ghost {
-  padding: 8px 18px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--text);
-}
-
-.site-nav .ghost:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
-
 /* ── hero ─────────────────────────────────────────────────────────────── */
 
-/* Above the resting thread. */
-main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
+main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
 
-/* The hero owns the first screen, because that is where the thread comes to
-   rest - it settles just below this copy. */
 .hero {
   display: flex;
   flex-direction: column;
@@ -200,13 +111,6 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
   padding: clamp(50px, 8vh, 90px) 0 clamp(120px, 20vh, 210px);
   max-width: 760px;
 }
-
-/* The catalogue arrives once the thread has landed. */
-.hero > * { transition: opacity 700ms ease, transform 700ms ease; }
-body.is-loading .hero > * { opacity: 0; transform: translateY(16px); }
-.hero > :nth-child(2) { transition-delay: 90ms; }
-.hero > :nth-child(3) { transition-delay: 180ms; }
-.hero > :nth-child(4) { transition-delay: 270ms; }
 
 .eyebrow {
   margin: 0 0 22px;
@@ -238,9 +142,6 @@ body.is-loading .hero > * { opacity: 0; transform: translateY(16px); }
 
 .btn:hover { transform: translateY(-2px); background: #b93435; }
 
-.btn-quiet { background: none; color: var(--text); border: 1px solid var(--line); }
-.btn-quiet:hover { background: var(--paper-2); }
-
 /* ── sections ─────────────────────────────────────────────────────────── */
 
 section { scroll-margin-top: 90px; }
@@ -258,6 +159,7 @@ section { scroll-margin-top: 90px; }
 }
 
 .card {
+  position: relative;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 3px;
@@ -266,9 +168,170 @@ section { scroll-margin-top: 90px; }
 }
 
 .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(36, 27, 25, 0.5); }
+.card.is-open { transform: none; box-shadow: 0 0 0 1px var(--ink) inset; }
 
-.card-swatch { aspect-ratio: 300 / 380; background: var(--ground); }
-.card-swatch canvas { width: 100%; height: 100%; display: block; }
+/* Was a woven canvas; holds a photograph now. The paper tint underneath means
+   a slow image reveals cloth-coloured ground rather than a black rectangle. */
+.card-shot { aspect-ratio: 4 / 5; background: var(--paper-2); }
+.card-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* The card carries its own photo controls, so the expander has to be its own
+   button rather than an overlay over the whole card. */
+.card-open {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: 11px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--step--1);
+  letter-spacing: 0.08em;
+  text-align: left;
+  cursor: pointer;
+  transition: color 180ms ease;
+}
+
+.card-open:hover { color: var(--ink); }
+.card-open:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* A chevron drawn from two borders, so there is no icon file to ship. */
+.card-open-mark {
+  width: 8px;
+  height: 8px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 240ms ease;
+}
+
+.card.is-open .card-open-mark { transform: translateY(1px) rotate(225deg); }
+
+/* ── the per-card photo gallery ───────────────────────────────────────── */
+
+.card-gallery {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+
+.card-gallery:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+.card-frames { position: absolute; inset: 0; }
+
+/* Every photo ships stacked and only the first is lit, so with no JS the card
+   still shows one correct image rather than four piled up. */
+.card-frames img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+
+.card-frames img.is-on { opacity: 1; }
+
+.shot-nav,
+.shot-dots { display: none; }
+
+#products[data-enhanced] .shot-nav {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-top: -17px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(246, 240, 230, 0.9);
+  color: var(--text);
+  font: inherit;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 200ms ease, background 200ms ease;
+}
+
+.shot-prev { left: 10px; }
+.shot-next { right: 10px; }
+
+#products[data-enhanced] .card:hover .shot-nav,
+#products[data-enhanced] .card-gallery:focus-within .shot-nav { opacity: 1; }
+#products[data-enhanced] .shot-nav:hover { background: var(--ink); color: #fff; }
+#products[data-enhanced] .shot-nav:focus-visible { opacity: 1; outline: 2px solid var(--ink); }
+
+#products[data-enhanced] .shot-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+}
+
+.shot-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 1px solid rgba(36, 27, 25, 0.35);
+  border-radius: 50%;
+  background: rgba(246, 240, 230, 0.75);
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+
+.shot-dot[aria-current="true"] { background: var(--ink); border-color: var(--ink); }
+.shot-dot:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ── price and dimensions, stated on the card face ────────────────────── */
+
+.card-meta {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.card-meta > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 3px 0;
+}
+
+.card-meta dt {
+  flex: none;
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card-meta dd { margin: 0; text-align: right; font-size: var(--step-0); }
+.card-meta .card-price { font-size: 20px; }
+
+.u-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .card-body { padding: 20px 22px 22px; }
 .card-body h3 { font-size: 21px; }
@@ -296,6 +359,68 @@ section { scroll-margin-top: 90px; }
 .card-foot b { font-weight: 400; font-size: 18px; }
 .card-foot span { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
 
+/* ── glimpse rail ─────────────────────────────────────────────────────── */
+
+.glimpse {
+  padding: clamp(50px, 8vh, 90px) 0 clamp(50px, 8vh, 90px);
+  border-top: 1px solid var(--line);
+}
+
+/* Four cards overrun the container on purpose — the clipped one at the right
+   edge is what says "keep going". */
+.rail {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 2px;
+  padding: 4px 2px 22px;
+  scrollbar-width: none;
+}
+
+.rail::-webkit-scrollbar { display: none; }
+.rail:focus-visible { outline: 1px solid var(--ink); outline-offset: 6px; }
+
+/* Rail cards are links, not the catalogue's expandable .card — see .rail-card. */
+
+.rail-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.rail-nav { display: flex; gap: 10px; }
+
+.rail-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease, border-color 200ms ease, opacity 200ms ease;
+}
+
+.rail-btn:hover:not(:disabled) { background: var(--paper-2); border-color: var(--ink); }
+.rail-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* ── catalogue page ───────────────────────────────────────────────────── */
+
+.page-head {
+  padding: clamp(46px, 8vh, 88px) 0 clamp(30px, 5vh, 54px);
+  max-width: 720px;
+}
+
+.page-head h1 { font-size: clamp(36px, 6vw, 66px); line-height: 1.05; }
+.page-head .lede { margin-top: 20px; }
+
 /* ── process ──────────────────────────────────────────────────────────── */
 
 .process { padding: clamp(50px, 8vh, 90px) 0; border-top: 1px solid var(--line); }
@@ -320,38 +445,440 @@ section { scroll-margin-top: 90px; }
 .steps h3 { font-size: 21px; }
 .steps p { margin: 10px 0 0; color: var(--muted); font-size: 16px; }
 
-/* ── visit ────────────────────────────────────────────────────────────── */
-
-.visit {
-  padding: clamp(50px, 8vh, 90px) 0 clamp(60px, 10vh, 110px);
-  border-top: 1px solid var(--line);
-  max-width: 660px;
-}
-
-.visit h2 { font-size: clamp(26px, 3.6vw, 38px); }
-.visit p { color: var(--muted); }
-
-.visit-line { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 26px; }
-.visit-line span { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
-
-/* ── footer ───────────────────────────────────────────────────────────── */
+/* ── footer — also the contact section ────────────────────────────────── */
 
 .site-foot {
+  scroll-margin-top: 74px;
+  background: var(--ground);
+  color: rgba(232, 217, 191, 0.7);
+}
+
+.foot-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(28px, 5vw, 70px);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 84px) clamp(20px, 5vw, 60px) clamp(34px, 5vh, 52px);
+}
+
+.foot-say { max-width: 46ch; }
+.foot-say h2 { font-size: clamp(26px, 3.6vw, 38px); color: var(--paper); }
+.foot-say p { margin: 14px 0 0; color: rgba(232, 217, 191, 0.72); }
+
+.foot-reach { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+
+/* The email is the contact, so it reads as itself rather than as a button. */
+.foot-email {
+  font-size: var(--step-2);
+  color: var(--paper);
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(232, 217, 191, 0.32);
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.foot-email:hover { color: var(--ink); border-color: var(--ink); }
+
+.foot-addr {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.9;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.foot-bar {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 12px;
-  padding: 26px clamp(20px, 5vw, 60px);
-  background: var(--ground);
-  color: rgba(232, 217, 191, 0.7);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px clamp(20px, 5vw, 60px) 26px;
+  border-top: 1px solid rgba(232, 217, 191, 0.16);
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
+/* ── catalogue: filters ───────────────────────────────────────────────── */
+
+.products { padding: clamp(30px, 5vh, 50px) 0 clamp(60px, 9vh, 110px); }
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.chip {
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 180ms, border-color 180ms, color 180ms;
+}
+
+.chip:hover { color: var(--text); border-color: var(--ink); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.chip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.filter-count {
+  margin: 0;
+  font-size: var(--step--2);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── catalogue: the inline detail panel ───────────────────────────────── */
+
+/* Panels ship expanded so the page is complete without JS. catalogue.js sets
+   data-enhanced on the grid, which is what switches collapsing on. */
+.card-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-rows: 1fr;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+.card-panel[hidden] { display: none; }
+
+#products[data-enhanced] .card-panel {
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease;
+}
+
+#products[data-enhanced] .card-panel.is-open { grid-template-rows: 1fr; }
+
+.card-panel-inner {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(24px, 3.4vw, 48px);
+  padding: clamp(24px, 3.4vw, 42px);
+}
+
+.panel-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--text);
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel-close:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+.gallery-main {
+  aspect-ratio: 4 / 5;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.gallery-thumbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.gallery-thumb {
+  aspect-ratio: 1;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 180ms, opacity 180ms;
+  opacity: 0.72;
+}
+
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gallery-thumb:hover { opacity: 1; }
+.gallery-thumb[aria-current="true"] { border-color: var(--ink); opacity: 1; }
+.gallery-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.panel-detail h3 { font-size: var(--step-3); }
+.panel-detail h3:focus { outline: none; }
+.panel-note { margin: var(--space-3) 0 0; color: #4a3c38; max-width: 56ch; }
+
+.spec-table {
+  width: 100%;
+  margin: var(--space-4) 0 0;
+  border-collapse: collapse;
+  font-size: var(--step-0);
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 10px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.spec-table th {
+  width: 38%;
+  font-weight: 400;
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-right: var(--space-3);
+}
+
+.panel-foot {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 var(--space-3);
+}
+
+.panel-foot b { font-weight: 400; font-size: 24px; }
+.panel-foot span { font-size: var(--step--1); letter-spacing: 0.08em; color: var(--muted); }
+
+/* ── front-page rail cards ────────────────────────────────────────────── */
+
+.rail-card {
+  flex: 0 0 clamp(232px, 62vw, 282px);
+  scroll-snap-align: start;
+  display: block;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 240ms ease, box-shadow 240ms ease;
+}
+
+.rail-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(36, 27, 25, 0.5); }
+.rail-card:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ── the founder's line, centred under the hero ───────────────────────── */
+
+.founder-say {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: clamp(50px, 8vh, 90px) 0;
+  text-align: center;
+  border-top: 1px solid var(--line);
+}
+
+.founder-say blockquote {
+  margin: 0;
+  font-size: clamp(23px, 3.2vw, 34px);
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--text);
+}
+
+/* Hanging quote marks, so the rag stays straight but the quote reads as one. */
+.founder-say blockquote::before { content: "\\201C"; margin-right: 0.06em; color: var(--gold); }
+.founder-say blockquote::after { content: "\\201D"; margin-left: 0.06em; color: var(--gold); }
+
+.founder-say cite {
+  display: block;
+  margin-top: var(--space-4);
+  font-style: normal;
+  font-size: var(--step--1);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.founder-say cite span {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+/* ── business model ───────────────────────────────────────────────────── */
+
+.model { padding: clamp(50px, 8vh, 90px) 0; border-top: 1px solid var(--line); }
+
+.model-sub {
+  margin: clamp(38px, 6vh, 64px) 0 0;
+  font-size: var(--step-2);
+}
+
+/* ── stories ──────────────────────────────────────────────────────────── */
+
+.story { padding: clamp(50px, 8vh, 90px) 0; border-top: 1px solid var(--line); }
+
+.story-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(28px, 4vw, 60px);
+  align-items: start;
+}
+
+.story-split + .story-split { margin-top: clamp(44px, 7vh, 80px); }
+.story-body h3 { font-size: var(--step-2); margin-bottom: var(--space-3); }
+
+.story-body p { margin: 0 0 var(--space-3); max-width: 62ch; }
+.story-body p:last-child { margin-bottom: 0; }
+
+.story-fig { margin: 0; }
+
+.story-fig img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper-2);
+}
+
+.story-fig figcaption {
+  margin-top: var(--space-2);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+.pull {
+  margin: clamp(40px, 6vh, 70px) 0;
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--paper-2);
+  border-left: 2px solid var(--ink);
+  border-radius: 0 3px 3px 0;
+}
+
+.pull blockquote {
+  margin: 0;
+  font-size: clamp(20px, 2.6vw, 28px);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.pull cite {
+  display: block;
+  margin-top: var(--space-3);
+  font-style: normal;
+  font-size: var(--step--2);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+  margin: clamp(34px, 5vh, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stat-row b {
+  display: block;
+  font-weight: 400;
+  font-size: clamp(32px, 4.6vw, 48px);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.stat-row span {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+
+/* ── trade ────────────────────────────────────────────────────────────── */
+
+.terms {
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.terms > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.terms dt,
+.terms b {
+  font-weight: 400;
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.terms p { margin: 0; }
+
+.trade-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;   /* lines up with the rail-foot button above */
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.foot-note {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 60px) clamp(24px, 4vh, 40px);
+  font-size: var(--step--1);
+  color: rgba(232, 217, 191, 0.5);
+}
+
+/* ── responsive ───────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .card-panel-inner { grid-template-columns: minmax(0, 1fr); }
+  .terms > li { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+}
+
 @media (max-width: 640px) {
-  .site-nav a:not(.ghost) { display: none; }
+  /* The nav used to hide everything but Catalogue at this width, which put the
+     buyer-facing sections out of reach on a phone. Wrap instead — a taller
+     header costs less than an unreachable page. */
+  .site-head { flex-wrap: wrap; gap: 12px; padding-bottom: 12px; }
+  .site-nav { width: 100%; flex-wrap: wrap; justify-content: flex-start; gap: 12px 18px; }
+  .site-nav a { font-size: 13px; }
   .brand-text i { display: none; }
+  .filter-bar { flex-direction: column; align-items: flex-start; }
+  .card-meta > div { flex-wrap: wrap; }
+  .card-meta dd { text-align: left; }
 }
 
 @media (prefers-reduced-motion: reduce) {

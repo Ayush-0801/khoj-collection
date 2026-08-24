@@ -1,2 +1,10 @@
+# Raw source material — photographs, dimension docs and outreach mails.
+# Holds correspondence naming real people and photographs of identifiable
+# artisans. Mined for the site; never published, never committed.
+_source/
+
 __pycache__/
 .DS_Store
+
+# Staging directory built by the Pages workflow.
+_site/
