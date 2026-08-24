@@ -243,7 +243,7 @@ section { scroll-margin-top: 90px; }
 .shot-nav,
 .shot-dots { display: none; }
 
-#products[data-enhanced] .shot-nav {
+[data-enhanced] .shot-nav {
   position: absolute;
   top: 50%;
   display: grid;
@@ -266,12 +266,12 @@ section { scroll-margin-top: 90px; }
 .shot-prev { left: 10px; }
 .shot-next { right: 10px; }
 
-#products[data-enhanced] .card:hover .shot-nav,
-#products[data-enhanced] .card-gallery:focus-within .shot-nav { opacity: 1; }
-#products[data-enhanced] .shot-nav:hover { background: var(--ink); color: #fff; }
-#products[data-enhanced] .shot-nav:focus-visible { opacity: 1; outline: 2px solid var(--ink); }
+[data-enhanced] .card:hover .shot-nav,
+[data-enhanced] .card-gallery:focus-within .shot-nav { opacity: 1; }
+[data-enhanced] .shot-nav:hover { background: var(--ink); color: #fff; }
+[data-enhanced] .shot-nav:focus-visible { opacity: 1; outline: 2px solid var(--ink); }
 
-#products[data-enhanced] .shot-dots {
+[data-enhanced] .shot-dots {
   position: absolute;
   left: 0;
   right: 0;
@@ -561,12 +561,12 @@ section { scroll-margin-top: 90px; }
 
 .card-panel[hidden] { display: none; }
 
-#products[data-enhanced] .card-panel {
+[data-enhanced] .card-panel {
   grid-template-rows: 0fr;
   transition: grid-template-rows 300ms ease;
 }
 
-#products[data-enhanced] .card-panel.is-open { grid-template-rows: 1fr; }
+[data-enhanced] .card-panel.is-open { grid-template-rows: 1fr; }
 
 .card-panel-inner {
   position: relative;
@@ -884,4 +884,115 @@ section { scroll-margin-top: 90px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition-duration: 1ms !important; }
+}
+
+/* ── catalogue sections ───────────────────────────────────────────────── */
+
+/* One block per line. The heading has to sit outside .grid, or it would
+   become a grid item and take a column to itself. */
+.cat-block + .cat-block { margin-top: clamp(48px, 7vh, 88px); }
+.cat-block[hidden] { display: none; }
+
+.cat-head {
+  margin-bottom: clamp(20px, 2.6vw, 32px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.cat-head h2 {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 30px);
+  letter-spacing: 0.01em;
+}
+
+.cat-head p {
+  margin: 8px 0 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+/* Prices are not settled yet; the card still has to show something in the
+   slot, so mark it rather than leave a gap that reads as free. */
+.card-price.is-tbd { color: var(--muted); font-style: italic; }
+
+/* ── PDF export ───────────────────────────────────────────────────────── */
+
+.export-bar {
+  margin-top: clamp(48px, 7vh, 88px);
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+
+.export-note {
+  margin: 14px auto 0;
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+/* ── print / Save as PDF ──────────────────────────────────────────────── */
+
+/* The export button is just window.print(); everything that makes the result
+   look like a catalogue rather than a screenshot of a web page is here. */
+@media print {
+  @page { margin: 14mm; }
+
+  html, body { background: #fff; }
+  body { color: #000; font-size: 10pt; }
+
+  .site-head,
+  .filter-bar,
+  .export-bar,
+  .shot-nav,
+  .shot-dots,
+  .card-open,
+  .panel-close,
+  .gallery-thumbs,
+  .panel-detail .btn,
+  .foot-main { display: none !important; }
+
+  main { padding: 0; }
+  .page-head { padding: 0 0 8mm; text-align: left; }
+  .page-head .lede { max-width: none; }
+
+  /* Each line starts its own page, so a printed run can be split by line. */
+  .cat-block { break-before: page; margin: 0; }
+  .cat-block:first-of-type { break-before: auto; }
+  .cat-head { break-after: avoid; margin-bottom: 6mm; }
+
+  .grid { grid-template-columns: 1fr 1fr; gap: 6mm; }
+
+  .card {
+    break-inside: avoid;
+    border: 1px solid #bbb;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  /* The carousel cannot be paged on paper, so always print the hero —
+     whichever frame happened to be showing on screen. */
+  .card-frames img { opacity: 0 !important; }
+  .card-frames img:first-child { opacity: 1 !important; }
+
+  /* catalogue.js unhides every panel before printing; these undo the collapse
+     animation so the specs actually have height on the page. */
+  .card-panel {
+    break-inside: avoid;
+    grid-template-rows: 1fr !important;
+    border: 0;
+    border-top: 1px solid #bbb;
+    border-radius: 0;
+    background: none;
+  }
+
+  .card-panel-inner { grid-template-columns: 1fr; padding: 4mm 0 6mm; }
+  .gallery { display: none; }
+
+  .spec-table { font-size: 9pt; }
+  .panel-note { max-width: none; }
+
+  .site-foot { break-before: avoid; border-top: 1px solid #bbb; padding-top: 4mm; }
+  .foot-note, .foot-bar { color: #000; }
 }

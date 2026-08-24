@@ -10,8 +10,16 @@
 (function () {
   'use strict';
 
-  var grid = document.getElementById('products');
-  if (!grid) return;
+  var root = document.getElementById('catalogue');
+  if (!root) return;
+
+  /* One grid per line, each inside its own .cat-block section. Cards are
+     collected across all of them; anything that has to stay within one grid
+     (which row a card sits in) checks parentNode rather than assuming there
+     is only the one. */
+  var grids = Array.prototype.slice.call(root.querySelectorAll('[data-cat-grid]'));
+  var blocks = Array.prototype.slice.call(root.querySelectorAll('[data-cat-block]'));
+  if (!grids.length) return;
 
   var CATS = [
     ['sabai',  'Sabai grass'],
@@ -24,13 +32,13 @@
   var ANIM = 300;   // keep in step with the .card-panel transition in style.css
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
-  var panels = Array.prototype.slice.call(grid.querySelectorAll('.card-panel'));
+  var cards = Array.prototype.slice.call(root.querySelectorAll('.card'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('.card-panel'));
   var open = null;
 
   /* Panels ship expanded and gallery controls ship hidden, so the no-JS page
      is complete and honest. This attribute is what flips both in CSS. */
-  grid.setAttribute('data-enhanced', '');
+  grids.forEach(function (g) { g.setAttribute('data-enhanced', ''); });
   panels.forEach(function (p) { p.hidden = true; });
 
   /* ── per-card photo galleries ───────────────────────────────────────── */
@@ -93,7 +101,8 @@
      edge instead, so the grid closes up behind it. */
   function place(card, panel) {
     var row = cards.filter(function (c) {
-      return !c.hidden && c.offsetTop === card.offsetTop;
+      return !c.hidden && c.parentNode === card.parentNode &&
+             c.offsetTop === card.offsetTop;
     });
     var last = row.length ? row[row.length - 1] : card;
     if (last.nextElementSibling !== panel) {
@@ -246,6 +255,13 @@
       if (hit) shown++;
     });
 
+    /* A section heading with nothing under it reads as an empty line rather
+       than a filtered-out one, so hide the whole block. */
+    blocks.forEach(function (b) {
+      var cat = b.getAttribute('data-cat-block');
+      b.hidden = !!active.length && !on(cat);
+    });
+
     if (bar) {
       Array.prototype.forEach.call(bar.querySelectorAll('.chip'), function (chip) {
         var cat = chip.getAttribute('data-cat');
@@ -314,4 +330,48 @@
 
   openFromHash();
   window.addEventListener('hashchange', openFromHash);
+
+  /* ── PDF export ─────────────────────────────────────────────────────── */
+
+  /* No library and no build step: the print stylesheet lays the catalogue out
+     as a document and the browser's own "Save as PDF" writes the file. That
+     also means the export follows the filters, since a filtered-out card is
+     hidden in print too.
+     Panels are collapsed by JS, so open every one for the duration of the
+     print and put them back afterwards — print CSS alone cannot undo the
+     inline `hidden` this file sets. */
+  var exporter = document.getElementById('export-pdf');
+  if (exporter) {
+    var restore = null;
+
+    function expandAll() {
+      // window.print() fires beforeprint, so this runs twice per button
+      // press. Without the guard the second pass would record an empty
+      // restore list and the panels would never collapse again.
+      if (restore) return;
+      if (open) close(open, true);
+      restore = panels.filter(function (p) { return p.hidden; });
+      restore.forEach(function (p) { p.hidden = false; });
+      document.body.classList.add('is-printing');
+    }
+
+    function collapseAll() {
+      if (!restore) return;
+      restore.forEach(function (p) { p.hidden = true; });
+      restore = null;
+      document.body.classList.remove('is-printing');
+    }
+
+    /* Safari and Firefox fire these around window.print() too, so hooking
+       them covers Ctrl-P as well as the button. */
+    window.addEventListener('beforeprint', expandAll);
+    window.addEventListener('afterprint', collapseAll);
+
+    exporter.addEventListener('click', function () {
+      expandAll();
+      window.print();
+      // afterprint is unreliable in a few browsers; this is the safety net.
+      window.setTimeout(collapseAll, 1000);
+    });
+  }
 })();
