@@ -128,19 +128,28 @@ main { max-width: 1180px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 60px); }
 
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 
+/* Used on both <a> and <button>; the border and font resets are what stop the
+   export button rendering as a system control next to the anchor buttons. */
 .btn {
   display: inline-block;
   padding: 13px 26px;
+  border: 0;
   border-radius: 999px;
   background: var(--ink);
   color: #fff;
+  font-family: inherit;
   font-size: 15px;
   letter-spacing: 0.04em;
   text-decoration: none;
+  cursor: pointer;
   transition: transform 180ms ease, background 180ms;
 }
 
 .btn:hover { transform: translateY(-2px); background: #b93435; }
+
+/* The export button holds this state while the photographs are fetched. */
+.btn:disabled { opacity: 0.6; cursor: progress; transform: none; }
+.btn:disabled:hover { transform: none; background: var(--ink); }
 
 /* ── sections ─────────────────────────────────────────────────────────── */
 
@@ -158,8 +167,14 @@ section { scroll-margin-top: 90px; }
   gap: clamp(20px, 2.6vw, 34px);
 }
 
+/* Grid stretches every card in a row to the tallest, so the card is a column:
+   the photo keeps its aspect ratio, the body takes the rest, and the price
+   block is pushed to the floor. Otherwise the notes vary in length and the
+   price lands at a different height on every card in the row. */
 .card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 3px;
@@ -168,54 +183,17 @@ section { scroll-margin-top: 90px; }
 }
 
 .card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(36, 27, 25, 0.5); }
-.card.is-open { transform: none; box-shadow: 0 0 0 1px var(--ink) inset; }
 
 /* Was a woven canvas; holds a photograph now. The paper tint underneath means
    a slow image reveals cloth-coloured ground rather than a black rectangle. */
-.card-shot { aspect-ratio: 4 / 5; background: var(--paper-2); }
+.card-shot { flex: none; aspect-ratio: 4 / 5; background: var(--paper-2); }
 .card-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-/* The card carries its own photo controls, so the expander has to be its own
-   button rather than an overlay over the whole card. */
-.card-open {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  width: 100%;
-  margin-top: var(--space-3);
-  padding: 11px 0 0;
-  border: 0;
-  border-top: 1px solid var(--line);
-  background: none;
-  color: var(--muted);
-  font: inherit;
-  font-size: var(--step--1);
-  letter-spacing: 0.08em;
-  text-align: left;
-  cursor: pointer;
-  transition: color 180ms ease;
-}
-
-.card-open:hover { color: var(--ink); }
-.card-open:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
-/* A chevron drawn from two borders, so there is no icon file to ship. */
-.card-open-mark {
-  width: 8px;
-  height: 8px;
-  border-right: 1px solid currentColor;
-  border-bottom: 1px solid currentColor;
-  transform: translateY(-2px) rotate(45deg);
-  transition: transform 240ms ease;
-}
-
-.card.is-open .card-open-mark { transform: translateY(1px) rotate(225deg); }
 
 /* ── the per-card photo gallery ───────────────────────────────────────── */
 
 .card-gallery {
   position: relative;
+  flex: none;
   aspect-ratio: 4 / 5;
   background: var(--paper-2);
   overflow: hidden;
@@ -297,8 +275,11 @@ section { scroll-margin-top: 90px; }
 
 /* ── price and dimensions, stated on the card face ────────────────────── */
 
+/* auto, not a fixed margin: whatever slack a short note leaves goes above the
+   rule, so the price sits on the same line across every card in the row. The
+   note's own bottom margin keeps the minimum gap when the card is full. */
 .card-meta {
-  margin: var(--space-3) 0 0;
+  margin: auto 0 0;
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
 }
@@ -333,8 +314,24 @@ section { scroll-margin-top: 90px; }
   white-space: nowrap;
 }
 
-.card-body { padding: 20px 22px 22px; }
-.card-body h3 { font-size: 21px; }
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 22px 22px;
+}
+
+.card-body h3 { font-size: 21px; line-height: 1.65; }
+
+/* The longest product names wrap to two lines at every column width the grid
+   actually produces, so reserve two on all of them and the place line, the
+   note and the rule below start level across the row. 3.3em is 2 × the
+   line-height above — keep the two in step. Below 600px the grid is a single
+   full-width column, every name fits on one line, and reserving a second
+   would only leave a gap under each. */
+@media (min-width: 600px) {
+  .card-body h3 { min-height: 3.3em; }
+}
 
 .card-place {
   margin: 5px 0 12px;
@@ -344,17 +341,22 @@ section { scroll-margin-top: 90px; }
   color: var(--gold);
 }
 
-.card-note { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted); }
+.card-note { margin: 0 0 var(--space-3); font-size: 15px; line-height: 1.55; color: var(--muted); }
 
+/* Same floor as .card-meta on the catalogue: the rail stretches its cards to
+   the tallest, so the price has to be pinned or it drifts. The 18px minimum
+   moves onto the place line above, since an auto margin has no minimum. */
 .card-foot {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin: 18px 0 0;
+  margin: auto 0 0;
   padding-top: 14px;
   border-top: 1px solid var(--line);
 }
+
+.rail-card .card-place { margin-bottom: 30px; }
 
 .card-foot b { font-weight: 400; font-size: 18px; }
 .card-foot span { font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
@@ -470,18 +472,6 @@ section { scroll-margin-top: 90px; }
 
 .foot-reach { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
 
-/* The email is the contact, so it reads as itself rather than as a button. */
-.foot-email {
-  font-size: var(--step-2);
-  color: var(--paper);
-  text-decoration: none;
-  padding-bottom: 3px;
-  border-bottom: 1px solid rgba(232, 217, 191, 0.32);
-  transition: color 180ms ease, border-color 180ms ease;
-}
-
-.foot-email:hover { color: var(--ink); border-color: var(--ink); }
-
 .foot-addr {
   margin: 0;
   font-size: 13px;
@@ -546,135 +536,13 @@ section { scroll-margin-top: 90px; }
   color: var(--muted);
 }
 
-/* ── catalogue: the inline detail panel ───────────────────────────────── */
-
-/* Panels ship expanded so the page is complete without JS. catalogue.js sets
-   data-enhanced on the grid, which is what switches collapsing on. */
-.card-panel {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-rows: 1fr;
-  background: var(--paper-2);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-}
-
-.card-panel[hidden] { display: none; }
-
-[data-enhanced] .card-panel {
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 300ms ease;
-}
-
-[data-enhanced] .card-panel.is-open { grid-template-rows: 1fr; }
-
-.card-panel-inner {
-  position: relative;
-  overflow: hidden;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: clamp(24px, 3.4vw, 48px);
-  padding: clamp(24px, 3.4vw, 42px);
-}
-
-.panel-close {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--paper);
-  color: var(--text);
-  font: inherit;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.panel-close:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
-
-.gallery-main {
-  aspect-ratio: 4 / 5;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.gallery-thumbs {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-2);
-  margin-top: var(--space-2);
-}
-
-.gallery-thumb {
-  aspect-ratio: 1;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  background: var(--paper);
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color 180ms, opacity 180ms;
-  opacity: 0.72;
-}
-
-.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.gallery-thumb:hover { opacity: 1; }
-.gallery-thumb[aria-current="true"] { border-color: var(--ink); opacity: 1; }
-.gallery-thumb:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-
-.panel-detail h3 { font-size: var(--step-3); }
-.panel-detail h3:focus { outline: none; }
-.panel-note { margin: var(--space-3) 0 0; color: #4a3c38; max-width: 56ch; }
-
-.spec-table {
-  width: 100%;
-  margin: var(--space-4) 0 0;
-  border-collapse: collapse;
-  font-size: var(--step-0);
-}
-
-.spec-table th,
-.spec-table td {
-  padding: 10px 0;
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid var(--line);
-}
-
-.spec-table th {
-  width: 38%;
-  font-weight: 400;
-  font-size: var(--step--2);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted);
-  padding-right: var(--space-3);
-}
-
-.panel-foot {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: var(--space-4) 0 var(--space-3);
-}
-
-.panel-foot b { font-weight: 400; font-size: 24px; }
-.panel-foot span { font-size: var(--step--1); letter-spacing: 0.08em; color: var(--muted); }
-
 /* ── front-page rail cards ────────────────────────────────────────────── */
 
 .rail-card {
   flex: 0 0 clamp(232px, 62vw, 282px);
   scroll-snap-align: start;
-  display: block;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 3px;
@@ -706,8 +574,8 @@ section { scroll-margin-top: 90px; }
 }
 
 /* Hanging quote marks, so the rag stays straight but the quote reads as one. */
-.founder-say blockquote::before { content: "\\201C"; margin-right: 0.06em; color: var(--gold); }
-.founder-say blockquote::after { content: "\\201D"; margin-left: 0.06em; color: var(--gold); }
+.founder-say blockquote::before { content: "\201C"; margin-right: 0.06em; color: var(--gold); }
+.founder-say blockquote::after { content: "\201D"; margin-left: 0.06em; color: var(--gold); }
 
 .founder-say cite {
   display: block;
@@ -864,7 +732,6 @@ section { scroll-margin-top: 90px; }
 /* ── responsive ───────────────────────────────────────────────────────── */
 
 @media (max-width: 760px) {
-  .card-panel-inner { grid-template-columns: minmax(0, 1fr); }
   .terms > li { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
 }
 
@@ -912,10 +779,6 @@ section { scroll-margin-top: 90px; }
   font-size: var(--step--1);
 }
 
-/* Prices are not settled yet; the card still has to show something in the
-   slot, so mark it rather than leave a gap that reads as free. */
-.card-price.is-tbd { color: var(--muted); font-style: italic; }
-
 /* ── PDF export ───────────────────────────────────────────────────────── */
 
 .export-bar {
@@ -937,62 +800,100 @@ section { scroll-margin-top: 90px; }
 /* The export button is just window.print(); everything that makes the result
    look like a catalogue rather than a screenshot of a web page is here. */
 @media print {
-  @page { margin: 14mm; }
+  /* Pinned to A4: the row-per-page arithmetic below is worked from 210x297,
+     and on US Letter the shorter page puts two rows exactly on the limit. */
+  @page { size: A4; margin: 14mm; }
 
   html, body { background: #fff; }
   body { color: #000; font-size: 10pt; }
 
-  .site-head,
+  /* Keep the gold place line and the mark itself; a browser drops colour in
+     print unless told otherwise. */
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
   .filter-bar,
   .export-bar,
   .shot-nav,
   .shot-dots,
-  .card-open,
-  .panel-close,
-  .gallery-thumbs,
-  .panel-detail .btn,
-  .foot-main { display: none !important; }
+  .site-nav,
+  .site-foot { display: none !important; }
+
+  /* The nav goes, the mark stays and centres: the header becomes the
+     catalogue's masthead rather than a stripped web page. Sticky and the
+     blur have to be undone or the header sits over the first row. */
+  .site-head {
+    position: static;
+    display: block;
+    padding: 0 0 6mm;
+    background: none;
+    backdrop-filter: none;
+    border-bottom: 1px solid #bbb;
+  }
+
+  .brand { justify-content: center; }
+  .brand-badge { border-color: #bbb; }
 
   main { padding: 0; }
-  .page-head { padding: 0 0 8mm; text-align: left; }
-  .page-head .lede { max-width: none; }
 
-  /* Each line starts its own page, so a printed run can be split by line. */
+  /* Masthead, then the title, then straight into the goods. The standing copy
+     under the title is written for the site — it points at a footer the PDF
+     no longer carries — so it goes rather than being reworded twice. */
+  .page-head { padding: 6mm 0 8mm; text-align: center; }
+  .page-head .lede { display: none; }
+
+  /* Each line starts its own page, so a printed run can be split by line.
+     The heading's height is load-bearing — see the card note below — so these
+     numbers are not free decoration: shrinking this block lets a second row
+     climb onto an opening page and the pagination changes. */
   .cat-block { break-before: page; margin: 0; }
   .cat-block:first-of-type { break-before: auto; }
-  .cat-head { break-after: avoid; margin-bottom: 6mm; }
+  .cat-head {
+    break-after: avoid;
+    margin-bottom: 8mm;
+    padding-bottom: 3.5mm;
+    border-bottom-color: #bbb;
+  }
+  .cat-head h2 { font-size: 16pt; line-height: 1.2; }
+  .cat-head p { margin-top: 1.5mm; font-size: 7.5pt; line-height: 1.35; max-width: none; }
 
-  .grid { grid-template-columns: 1fr 1fr; gap: 6mm; }
+  /* Three to a row on A4: 210mm less the 14mm margins is 182mm, less two 6mm
+     gaps, so a column is 56.7mm and its 4:5 photograph is 70.8mm. With the
+     body below that a card runs ~120mm, and two rows (246mm with the gap)
+     clear the 269mm of usable height with 23mm to spare. break-inside on the
+     card is what guarantees a row is never cut: the three cards share a top
+     edge and a height, so they move to the next page together or not at all. */
+  .grid { grid-template-columns: repeat(3, 1fr); gap: 6mm; }
 
   .card {
     break-inside: avoid;
+    page-break-inside: avoid;
     border: 1px solid #bbb;
     box-shadow: none !important;
     transform: none !important;
   }
 
+  /* Screen type is set for a 300px card; a 57mm column needs its own scale or
+     the title alone eats the body.
+
+     The card height is tuned, not merely small. The wanted pagination is one
+     row on a line's opening page and two on every page after it, so the card
+     has to be tall enough that two rows plus a heading overflow the page, and
+     short enough that two rows without one do not. At 124mm it clears both:
+     253.9mm of rows against 269mm of clean page (15mm spare) but against only
+     245.7mm once a heading is above them (8mm over). The 5.5mm padding is
+     part of that height — trimming it drops a row onto the wrong page. */
+  .card-body { padding: 5.5mm; }
+  .card-body h3 { font-size: 10.5pt; line-height: 1.25; min-height: 2.5em; }
+  .card-place { margin: 1mm 0 2mm; font-size: 6.5pt; letter-spacing: 0.16em; }
+  .card-note { margin: 0 0 2.5mm; font-size: 8pt; line-height: 1.35; }
+  .card-meta { padding-top: 2mm; border-top-color: #bbb; }
+  .card-meta > div { padding: 0.3mm 0; }
+  .card-meta dt { font-size: 6.5pt; letter-spacing: 0.12em; }
+  .card-meta dd { font-size: 8.5pt; }
+  .card-meta .card-price { font-size: 10pt; }
+
   /* The carousel cannot be paged on paper, so always print the hero —
      whichever frame happened to be showing on screen. */
   .card-frames img { opacity: 0 !important; }
   .card-frames img:first-child { opacity: 1 !important; }
-
-  /* catalogue.js unhides every panel before printing; these undo the collapse
-     animation so the specs actually have height on the page. */
-  .card-panel {
-    break-inside: avoid;
-    grid-template-rows: 1fr !important;
-    border: 0;
-    border-top: 1px solid #bbb;
-    border-radius: 0;
-    background: none;
-  }
-
-  .card-panel-inner { grid-template-columns: 1fr; padding: 4mm 0 6mm; }
-  .gallery { display: none; }
-
-  .spec-table { font-size: 9pt; }
-  .panel-note { max-width: none; }
-
-  .site-foot { break-before: avoid; border-top: 1px solid #bbb; padding-top: 4mm; }
-  .foot-note, .foot-bar { color: #000; }
 }
