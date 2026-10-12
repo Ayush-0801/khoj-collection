@@ -415,13 +415,38 @@ section { scroll-margin-top: 90px; }
 
 /* ── catalogue page ───────────────────────────────────────────────────── */
 
-.page-head {
-  padding: clamp(46px, 8vh, 88px) 0 clamp(30px, 5vh, 54px);
-  max-width: 720px;
+/* Sacramento: a monoline script, every stroke one even width, so the title
+   reads as a single running thread. Latin subset only, self-hosted so the
+   PDF export never waits on a font server. */
+@font-face {
+  font-family: "Sacramento";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/sacramento-latin.woff2") format("woff2");
 }
 
-.page-head h1 { font-size: clamp(36px, 6vw, 66px); line-height: 1.05; }
-.page-head .lede { margin-top: 20px; }
+.page-head {
+  padding: clamp(46px, 8vh, 88px) 0 clamp(30px, 5vh, 54px);
+  container-type: inline-size;
+}
+
+/* Sized off the container, not the viewport, so the title spans the full
+   measure at every width — screen and the A4 print column alike. 19.8cqi is
+   "The Catalogue" set in Sacramento, measured at 4.97em wide; change the
+   words and this has to be re-measured. */
+.page-head h1 {
+  font-family: "Sacramento", cursive;
+  font-size: 19.8cqi;
+  line-height: 1.1;
+  /* The g's tail drops well below the line box; keep it off the lede. */
+  padding-bottom: 0.2em;
+  letter-spacing: 0;
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+}
+.page-head .lede { max-width: 720px; margin-top: 20px; }
 
 /* ── process ──────────────────────────────────────────────────────────── */
 
@@ -779,6 +804,20 @@ section { scroll-margin-top: 90px; }
   font-size: var(--step--1);
 }
 
+/* The offer block sits first, so it carries a tag above the heading and the
+   cards quote on enquiry rather than carrying a price. */
+.cat-head .offer-tag {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: var(--ink);
+  color: #fff;
+  font-size: var(--step--2);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 /* ── PDF export ───────────────────────────────────────────────────────── */
 
 .export-bar {
@@ -801,10 +840,12 @@ section { scroll-margin-top: 90px; }
    look like a catalogue rather than a screenshot of a web page is here. */
 @media print {
   /* Pinned to A4: the row-per-page arithmetic below is worked from 210x297,
-     and on US Letter the shorter page puts two rows exactly on the limit. */
-  @page { size: A4; margin: 14mm; }
+     and on US Letter the shorter page drops the second row off every page. */
+  @page { size: A4; margin: 10mm 14mm; background: var(--paper); }
 
-  html, body { background: #fff; }
+  /* The site's paper ground, not white: the @page background fills the
+     margins, the body fills the rest, and the cards stay white on top. */
+  html, body { background: var(--paper); }
   body { color: #000; font-size: 10pt; }
 
   /* Keep the gold place line and the mark itself; a browser drops colour in
@@ -843,23 +884,22 @@ section { scroll-margin-top: 90px; }
 
   /* Each line starts its own page, so a printed run can be split by line.
      The heading's height is load-bearing — see the card note below — so these
-     numbers are not free decoration: shrinking this block lets a second row
-     climb onto an opening page and the pagination changes. */
-  .cat-block { break-before: page; margin: 0; }
+     numbers are not free decoration: growing this block pushes the second row
+     off an opening page and leaves it half empty. */
+  .cat-block,
+  .cat-block + .cat-block { break-before: page; margin: 0; }
   .cat-block:first-of-type { break-before: auto; }
   .cat-head {
     break-after: avoid;
-    margin-bottom: 8mm;
-    padding-bottom: 3.5mm;
+    margin-bottom: 5mm;
+    padding-bottom: 2.5mm;
     border-bottom-color: #bbb;
   }
   .cat-head h2 { font-size: 16pt; line-height: 1.2; }
   .cat-head p { margin-top: 1.5mm; font-size: 7.5pt; line-height: 1.35; max-width: none; }
 
   /* Three to a row on A4: 210mm less the 14mm margins is 182mm, less two 6mm
-     gaps, so a column is 56.7mm and its 4:5 photograph is 70.8mm. With the
-     body below that a card runs ~120mm, and two rows (246mm with the gap)
-     clear the 269mm of usable height with 23mm to spare. break-inside on the
+     gaps, so a column is 56.7mm. break-inside on the
      card is what guarantees a row is never cut: the three cards share a top
      edge and a height, so they move to the next page together or not at all. */
   .grid { grid-template-columns: repeat(3, 1fr); gap: 6mm; }
@@ -875,16 +915,17 @@ section { scroll-margin-top: 90px; }
   /* Screen type is set for a 300px card; a 57mm column needs its own scale or
      the title alone eats the body.
 
-     The card height is tuned, not merely small. The wanted pagination is one
-     row on a line's opening page and two on every page after it, so the card
-     has to be tall enough that two rows plus a heading overflow the page, and
-     short enough that two rows without one do not. At 124mm it clears both:
-     253.9mm of rows against 269mm of clean page (15mm spare) but against only
-     245.7mm once a heading is above them (8mm over). The 5.5mm padding is
-     part of that height — trimming it drops a row onto the wrong page. */
-  .card-body { padding: 5.5mm; }
+     The card height is tuned, not merely small: every page carries two full
+     rows, a line's opening page included, so the only short page is a line's
+     last one. That needs two rows, the gap and a ~20mm heading inside the
+     277mm of usable height, so a card can be ~125mm at most. The 5:6 photo
+     (68mm, a sliver shorter than the screen's 4:5) and the 4mm padding are
+     what keep it under — grow either and the opening page loses its second
+     row. */
+  .card-gallery { aspect-ratio: 5 / 6; }
+  .card-body { padding: 4mm; }
   .card-body h3 { font-size: 10.5pt; line-height: 1.25; min-height: 2.5em; }
-  .card-place { margin: 1mm 0 2mm; font-size: 6.5pt; letter-spacing: 0.16em; }
+  .card-place { margin: 0.5mm 0 1.5mm; font-size: 6.5pt; letter-spacing: 0.16em; }
   .card-note { margin: 0 0 2.5mm; font-size: 8pt; line-height: 1.35; }
   .card-meta { padding-top: 2mm; border-top-color: #bbb; }
   .card-meta > div { padding: 0.3mm 0; }

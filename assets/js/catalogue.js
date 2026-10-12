@@ -17,6 +17,7 @@
   if (!grids.length) return;
 
   var CATS = [
+    ['pattachitra', 'Pattachitra'],
     ['sabai',  'Sabai grass'],
     ['dohar',  'Dohars'],
     ['runner', 'Table runners'],
